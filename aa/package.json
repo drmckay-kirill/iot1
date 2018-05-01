@@ -1,0 +1,9 @@
+{
+  "name": "abe-attribute-authority",
+  "version": "0.0.1",
+  "description": "ABE Attribute Authority example for FI-WARE GE applications",
+  "author": "Kirill Y. Ponomarev",
+  "dependencies": {
+    "express": "3.x"
+  }
+}
