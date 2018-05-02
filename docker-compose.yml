@@ -37,13 +37,13 @@ services:
     environment:
       - DATABASE_HOST=mysql
 
-  aa:
-    image: node:latest
+  aa-webapp:
+    image: node:latest  
     ports:
       - "80:80"
     networks:
       idm_network:
         ipv4_address: 172.18.1.7
-    volumes:      
-      - /home/drmckay/science/iot1/aa:/opt/aa
+    volumes:
+      - /home/drmckay/science/iot1/aa-webapp:/opt/aa-webapp
     tty: true
