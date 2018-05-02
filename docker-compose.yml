@@ -47,3 +47,14 @@ services:
     volumes:
       - /home/drmckay/science/iot1/aa-webapp:/opt/aa-webapp
     tty: true
+
+  aa-backend:
+    image: node:latest
+    ports:
+      - "8080:80"    
+    networks:
+      idm_network:
+        ipv4_address: 172.18.1.8
+    volumes:      
+      - /home/drmckay/science/iot1/aa-backend:/opt/aa-backend
+    tty: true

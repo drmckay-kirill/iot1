@@ -2,6 +2,7 @@ var express = require('express');
 var OAuth2 = require('./oauth2').OAuth2;
 var config = require('./config');
 var session = require('express-session');
+var http = require("http");
 
 // Express configuration
 var app = express();
@@ -21,13 +22,45 @@ app.configure(function () {
     app.use(express.static(__dirname + '/public'));
 });
 
-
 // Config data from config.js file
 var client_id = config.client_id;
 var client_secret = config.client_secret;
 var idmURL = config.idmURL;
 var response_type = config.response_type;
 var callbackURL = config.callbackURL;
+
+function getJSON (rest, method, onResult) {
+    var options = {
+        host: config.backend_host,
+        port: config.backend_port,
+        path: rest,
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    var req = http.request(options, function(res)
+    {
+        var output = '';
+        res.setEncoding('utf8');
+
+        res.on('data', function (chunk) {
+            output += chunk;
+        });
+
+        res.on('end', function() {
+            var obj = JSON.parse(output);
+            onResult(res.statusCode, obj);
+        });
+    });
+
+    req.on('error', function(err) {
+        console.log('error: ' + err.message);
+    });
+
+    req.end();
+};
 
 // Creates oauth library object with the config data
 var oa = new OAuth2(client_id,
@@ -101,7 +134,11 @@ app.get('/logout', function(req, res) {
 
 app.get('/attributes', function (req, res) {
     if (req.session.access_token) {
-         res.send("Not implemented");
+        
+        getJSON('/attributes', 'GET', function (status, response) {
+            res.send(response);
+        });
+        
     } else {
         res.send("Not authenticated", 401);
     }
