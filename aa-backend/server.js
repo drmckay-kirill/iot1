@@ -8,6 +8,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/attributes', function (req, res) {
+    console.log("Request for attributes list");
     res.send(attributes_list);
 });
 

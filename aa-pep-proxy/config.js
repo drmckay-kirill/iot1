@@ -13,16 +13,15 @@ config.https = {
 
 config.idm = {
 	host: 'fiware-idm',
-	port: 443,
-	ssl: true
+	port: 3000,
+	ssl: false
 }
 
 config.app = {
-	host: 'aa',
+	host: 'aa-backend',
 	port: '80',
 	ssl: false // Use true if the app server listens in https
 }
-
 
 // Credentials obtained when registering PEP Proxy in app_id in Account Portal
 config.pep = {

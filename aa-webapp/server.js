@@ -29,17 +29,18 @@ var idmURL = config.idmURL;
 var response_type = config.response_type;
 var callbackURL = config.callbackURL;
 
-function getJSON (rest, method, onResult) {
+function getJSON (rest, method, access_token, onResult) {
     var options = {
         host: config.backend_host,
         port: config.backend_port,
         path: rest,
         method: method,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-auth-token': access_token
         }
     };
-
+    
     var req = http.request(options, function(res)
     {
         var output = '';
@@ -135,7 +136,7 @@ app.get('/logout', function(req, res) {
 app.get('/attributes', function (req, res) {
     if (req.session.access_token) {
         
-        getJSON('/attributes', 'GET', function (status, response) {
+        getJSON('/attributes', 'GET', req.session.access_token, function (status, response) {
             res.send(response);
         });
         
