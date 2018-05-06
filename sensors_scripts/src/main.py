@@ -6,6 +6,7 @@ def main():
     with open('config.json') as json_data:
         config = json.load(json_data)
 
+    logging.info('Request attributes list')
     headers = {
         'Content-type': 'application/json',
         'x-auth-token': config['access_token']
