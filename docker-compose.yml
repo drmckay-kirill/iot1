@@ -66,3 +66,14 @@ services:
     volumes:      
       - /home/drmckay/science/iot1/aa-backend:/opt/aa-backend
     tty: true
+
+  sensors:
+    build:
+      context: sensors_scripts
+      dockerfile: Dockerfile
+    networks:
+      idm_network:
+        ipv4_address: 172.18.1.10
+    volumes: 
+      - /home/drmckay/science/iot1/sensors_scripts:/opt/sensors
+    tty: true
