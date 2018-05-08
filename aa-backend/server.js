@@ -1,20 +1,28 @@
 var express = require('express');
 var attributes_list = require('./attributes.json');
 var MongoClient = require('mongodb').MongoClient;
+var config = require('./config');
 
 var app = express();
 app.use(express.json());
 
-app.get('/', function(req, res) {
-    res.redirect('/attributes');
-});
+MongoClient.connect(config.db_host, (err, database) => {
+    if (err) {
+        return console.log(err);
+    }
+    console.log('Attribute Authority server listen in port 80.');
+    var db = database.db("aa");
 
-app.get('/attributes', function (req, res) {
-    console.log("Request for attributes list");
-    res.send(attributes_list);
-});
+    app.get('/', function(req, res) {
+        res.redirect('/attributes');
+    });    
 
-require('./routes')(app, {});
+    app.get('/attributes', function (req, res) {
+        console.log("Request for attributes list");
+        res.send(attributes_list);
+    });
 
-console.log('Attribute Authority server listen in port 80.');
-app.listen(80);
+    require('./routes')(app, db);
+    
+    app.listen(80);
+})

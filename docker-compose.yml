@@ -10,6 +10,7 @@ networks:
 
 volumes:
   vol-mysql:
+  vol-mongo:
 
 services:
 
@@ -77,3 +78,11 @@ services:
     volumes: 
       - /home/drmckay/science/iot1/sensors_scripts:/opt/sensors
     tty: true
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - vol-mongo:/data/db    
+    networks:
+      idm_network:
+        ipv4_address: 172.18.1.11

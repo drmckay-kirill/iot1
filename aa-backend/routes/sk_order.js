@@ -4,14 +4,26 @@ module.exports = function(app, db) {
         console.log('Request for secret key...');
         console.log('Cancel last request if it is not approved');
         console.log('Save request in database, it will wait for owner approve');
-    
-        console.log(req.headers);
-        console.log(req.body);
-        console.log(req.body.user_owner);
         
+        if (typeof req.body.attributes == "undefined" || req.body.attributes.length == 0) {
+            res.send("Empty attributes array", 400)
+        }
+
         secret_key_order = {
-            'status': 'new'
+            'status': 'new',
+            'create_date': Date.now(),
+            'attributes': req.body.attributes,
+            'user_owner': req.body.user_owner,
+            'device': req.headers['x-nick-name']
         };
-        res.send(secret_key_order); 
+        
+        db.collection('orders').insert(secret_key_order, (err, result) => {
+            if (err) {
+                res.send(err, 400);
+            } else {
+                res.send(result.ops[0]);
+            }
+        })
+        
     });
 };
