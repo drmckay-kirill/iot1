@@ -13,6 +13,13 @@ def main():
     )
     logging.info(res.text)
 
+    # logging.info('Request all orders')
+    # res = requests.get(config['aa_host'] + '/secret_key/order', headers = {
+    #         'x-auth-token': config['access_token']
+    #     }
+    # )
+    # logging.info(res.text)
+
     logging.info('Request secret key')
     headers = {
         "Content-type": "application/json",
