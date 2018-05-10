@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=title %></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h3>Successfully authenticated!</h3>
+    <p>Your oauth access token: <%=access_token %></p>
+
+    <% if (displayName) {%>
+        <p>Display name: <%=displayName %></p>
+    <%} %>
+
+    <% if (email) {%>
+        <p>Email: <%=email %></p>
+    <%} %>
+
+    <% if (attributes.length > 0) { %>
+        <h3>Возможные атрибуты:</h3>
+        <ul>
+            <% for(var i=0; i<attributes.length;i++) {%>
+                <li><%=attributes[i] %></li>
+            <%} %>
+        </ul>        
+    <%} %>
+
+    <button onclick='window.location.href="/user_info"'>User information</button>
+    <button onclick='window.location.href="/logout"'>Logout</button>
+    <button onclick='window.location.href="/attributes"'>List of attributes</button>
+
+</body>
+</html>
