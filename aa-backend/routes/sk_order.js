@@ -7,7 +7,7 @@ module.exports = function(app, db) {
         }
 
         console.log('Cancel last request if it is not approved');
-        var details = { 'status': 'new' };
+        var details = { 'status': 'new', 'device': req.headers['x-nick-name'] };
         var newValues = {$set: { 'status': 'cancel' } };
         db.collection('orders').updateMany(details, newValues, (err, result) => {
             if (err) {
