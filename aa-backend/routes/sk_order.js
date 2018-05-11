@@ -5,9 +5,10 @@ module.exports = function(app, db) {
         if (typeof req.body.attributes == "undefined" || req.body.attributes.length == 0) {
             res.send("Empty attributes array", 400)
         }
-
+        device_id = req.headers['x-nick-name']; 
+        
         console.log('Cancel last request if it is not approved');
-        var details = { 'status': 'new', 'device': req.headers['x-nick-name'] };
+        var details = { 'status': 'new', 'device': device_id };
         var newValues = {$set: { 'status': 'cancel' } };
         db.collection('orders').updateMany(details, newValues, (err, result) => {
             if (err) {
@@ -21,13 +22,14 @@ module.exports = function(app, db) {
             'create_date': Date.now(),
             'attributes': req.body.attributes,
             'user_owner': req.body.user_owner,
-            'device': req.headers['x-nick-name']
+            'device': device_id
         };
         db.collection('orders').insert(secret_key_order, (err, result) => {
             if (err) {
                 res.send(err, 400);
+            } else {
+                res.send(result.ops[0]);
             };
-            res.send(result.ops[0]);
         });
         
     });
@@ -38,8 +40,9 @@ module.exports = function(app, db) {
         db.collection('orders').find(details).toArray((err, res) => {
             if (err) {
                 response.send(err, 400);
+            } else {
+                response.send(res);
             };
-            response.send(res);
         });
     });
 
