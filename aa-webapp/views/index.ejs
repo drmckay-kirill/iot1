@@ -1,55 +1,66 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title><%=title %></title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">    
+    <title><%=title %></title>
 </head>
 <body>
-    <h3>Successfully authenticated!</h3>
-    <p>Your oauth access token: <%=access_token %></p>
 
-    <% if (displayName) {%>
-        <p>Display name: <%=displayName %></p>
-    <%} %>
-
-    <% if (email) {%>
-        <p>Email: <%=email %></p>
-    <%} %>
-
-    <% if (attributes.length > 0) { %>
-        <h3>Possible attribute:</h3>
-        <ul>
-            <% for(var i=0; i<attributes.length;i++) {%>
-                <li><%=attributes[i] %></li>
-            <%} %>
-        </ul>        
-    <%} %>
     
-    <% if (orders.length > 0) { %>
-        <h3>Order for secret keys:</h3>
-        <table>
-            <tr>
-                <th>Create date</th>
-                <th>ID</th>
-                <th>Attributes</th>
-                <th>Status</th>
-            </tr>
-            <% for(var i=0; i<orders.length;i++) {%>
+
+        <h3>Successfully authenticated!</h3>
+        <p>Your oauth access token: <%=access_token %></p>
+
+        <% if (displayName) {%>
+            <p>Display name: <%=displayName %></p>
+        <%} %>
+
+        <% if (email) {%>
+            <p>Email: <%=email %></p>
+        <%} %>
+
+        <% if (attributes.length > 0) { %>
+            <h3>Possible attribute:</h3>
+            <ul>
+                <% for(var i=0; i<attributes.length;i++) {%>
+                    <li><%=attributes[i] %></li>
+                <%} %>
+            </ul>        
+        <%} %>
+        
+        <% if (orders.length > 0) { %>
+            <h3>Order for secret keys:</h3>
+            <table>
                 <tr>
-                    <td><%=orders[i].create_date %></td>
-                    <td><%=orders[i].device %></td>
-                    <td><%=orders[i].attributes.join() %></td>
-                    <td><%=orders[i].status %></td>
+                    <th>Create date</th>
+                    <th>ID</th>
+                    <th>Attributes</th>
+                    <th>Status</th>
                 </tr>
-            <%} %>            
-        </table>
-    <%} %>
+                <% for(var i=0; i<orders.length;i++) {%>
+                    <tr>
+                        <td><%=orders[i].create_date %></td>
+                        <td><%=orders[i].device %></td>
+                        <td><%=orders[i].attributes.join() %></td>
+                        <td><%=orders[i].status %></td>
+                    </tr>
+                <%} %>            
+            </table>
+        <%} %>
+
+    
 
     <button onclick='window.location.href="/approvement/new"'>List only new orders</button>
     <button onclick='window.location.href="/user_info"'>User information</button>
     <button onclick='window.location.href="/logout"'>Logout</button>
     <button onclick='window.location.href="/attributes"'>List of attributes</button>
     <button onclick='window.location.href="/approvement"'>List all orders</button>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 </body>
 </html>

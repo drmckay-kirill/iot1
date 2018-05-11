@@ -8,7 +8,7 @@ module.exports = function(app, db) {
                 response.send(err, 400);
             } else {
                 res.sort(function(a,b) { 
-                    return (a.create_date > b.create_date) ? 1 : ((b.create_date > a.create_date) ? -1 : 0);
+                    return (a.create_date > b.create_date) ? -1 : ((b.create_date > a.create_date) ? 1 : 0);
                 });
                 response.send(res);
             };
