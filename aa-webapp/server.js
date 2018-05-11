@@ -67,7 +67,8 @@ function renderVariables() {
         "access_token": "",
         "displayName": undefined,
         "email": undefined,
-        "attributes": []
+        "attributes": [],
+        "orders": []
     }  
 };
 
@@ -145,6 +146,36 @@ app.get('/attributes', function (req, res) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             renderStructure.attributes = response;
+            res.render("index", renderStructure);          
+        });
+        
+    } else {
+        res.send("Not authenticated", 401);
+    }
+});
+
+app.get('/approvement', function (req, res) {
+    if (req.session.access_token) {
+        
+        getJSON('/secret_key/approvement', 'GET', req.session.access_token, function (status, response) {
+            renderStructure = renderVariables();
+            renderStructure.access_token = req.session.access_token;
+            renderStructure.orders = response;
+            res.render("index", renderStructure);          
+        });
+        
+    } else {
+        res.send("Not authenticated", 401);
+    }
+});
+
+app.get('/approvement/new', function (req, res) {
+    if (req.session.access_token) {
+        
+        getJSON('/secret_key/approvement/new', 'GET', req.session.access_token, function (status, response) {
+            renderStructure = renderVariables();
+            renderStructure.access_token = req.session.access_token;
+            renderStructure.orders = response;
             res.render("index", renderStructure);          
         });
         

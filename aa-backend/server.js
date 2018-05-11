@@ -10,7 +10,7 @@ MongoClient.connect(config.db_host, (err, database) => {
     if (err) {
         return console.log(err);
     }
-    console.log('Attribute Authority server listen in port 80.');
+    console.log('Connect to MongoDB database.');
     var db = database.db("aa");
 
     app.get('/', function(req, res) {
@@ -24,5 +24,7 @@ MongoClient.connect(config.db_host, (err, database) => {
 
     require('./routes')(app, db);
     
-    app.listen(80);
+    app.listen(80, () => {
+        console.log('Attribute Authority server listen in port 80.');       
+    });
 })
