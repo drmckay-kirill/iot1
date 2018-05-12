@@ -8,10 +8,11 @@
 </head>
 <body>
 
-    
+    <div class="jumbotron">
 
-        <h3>Successfully authenticated!</h3>
-        <p>Your oauth access token: <%=access_token %></p>
+        <h1 class="display4">Successfully authenticated!</h1>
+        <p class="lead">Your oauth access token: <%=access_token %></p>
+        <hr class="my-4">
 
         <% if (displayName) {%>
             <p>Display name: <%=displayName %></p>
@@ -22,7 +23,7 @@
         <%} %>
 
         <% if (attributes.length > 0) { %>
-            <h3>Possible attribute:</h3>
+            <h3 class="display4">Possible attributes:</h3>
             <ul>
                 <% for(var i=0; i<attributes.length;i++) {%>
                     <li><%=attributes[i] %></li>
@@ -31,33 +32,37 @@
         <%} %>
         
         <% if (orders.length > 0) { %>
-            <h3>Order for secret keys:</h3>
-            <table>
-                <tr>
-                    <th>Create date</th>
-                    <th>ID</th>
-                    <th>Attributes</th>
-                    <th>Status</th>
-                </tr>
-                <% for(var i=0; i<orders.length;i++) {%>
+            <h3 class="display4">Order for secret keys:</h3>
+            <table class="table">
+                <thead>
                     <tr>
-                        <td><%=orders[i].create_date %></td>
-                        <td><%=orders[i].device %></td>
-                        <td><%=orders[i].attributes.join() %></td>
-                        <td><%=orders[i].status %></td>
+                        <th scope="col">Create date</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Attributes</th>
+                        <th scope="col">Status</th>
                     </tr>
-                <%} %>            
+                </thead>
+                <tbody>
+                    <% for(var i=0; i<orders.length;i++) {%>
+                        <tr>
+                            <td><%=moment(orders[i].create_date).format('DD-MM-YYYY') %></td>
+                            <td><%=orders[i].device %></td>
+                            <td><%=orders[i].attributes.join() %></td>
+                            <td><%=orders[i].status %></td>
+                        </tr>
+                    <%} %>
+                </tbody>
             </table>
         <%} %>
 
+        <a class="btn btn-primary btn-lg" role="button" href="/approvement/new">List only new orders</a>
+        <a class="btn btn-primary btn-lg" role="button" href="/user_info">User information</a>
+        <a class="btn btn-primary btn-lg" role="button" href="/logout">Logout</a>
+        <a class="btn btn-primary btn-lg" role="button" href="/attributes">List of attributes</a>
+        <a class="btn btn-primary btn-lg" role="button" href="/approvement">List all orders</a>
+
+    </div>
     
-
-    <button onclick='window.location.href="/approvement/new"'>List only new orders</button>
-    <button onclick='window.location.href="/user_info"'>User information</button>
-    <button onclick='window.location.href="/logout"'>Logout</button>
-    <button onclick='window.location.href="/attributes"'>List of attributes</button>
-    <button onclick='window.location.href="/approvement"'>List all orders</button>
-
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>

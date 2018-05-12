@@ -3,6 +3,7 @@ var OAuth2 = require('./oauth2').OAuth2;
 var config = require('./config');
 var session = require('express-session');
 var http = require("http");
+var moment = require('moment');
 const title = "TEST";
 
 // Express configuration
@@ -63,6 +64,7 @@ function getJSON (rest, method, access_token, onResult) {
 
 function renderVariables() {
     return {
+        "moment": moment,
         "title": title,
         "access_token": "",
         "displayName": undefined,
