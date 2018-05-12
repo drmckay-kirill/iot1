@@ -12,6 +12,9 @@
 
         <h1 class="display4">Successfully authenticated!</h1>
         <p class="lead">Your oauth access token: <%=access_token %></p>
+        <% if (message) {%>
+            <p class="lead"><%=message %></p>
+        <%} %>
         <hr class="my-4">
 
         <% if (displayName) {%>
@@ -40,6 +43,10 @@
                         <th scope="col">ID</th>
                         <th scope="col">Attributes</th>
                         <th scope="col">Status</th>
+                        <% if(approve_mode) {%>
+                            <th scope="col">Approve</th>
+                            <th scope="col">Deny</th>
+                        <%} %>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +56,10 @@
                             <td><%=orders[i].device %></td>
                             <td><%=orders[i].attributes.join() %></td>
                             <td><%=orders[i].status %></td>
+                            <% if(approve_mode) {%>
+                                <td><a class="approve-btn btn btn-success" data-bean-id="<%=orders[i].device %>">+</a></td>
+                                <td><a class="deny-btn btn btn-dark" data-bean-id="<%=orders[i].device %>">-</a></td>
+                            <%} %>
                         </tr>
                     <%} %>
                 </tbody>
@@ -64,8 +75,22 @@
     </div>
     
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.approve-btn').click(function() {
+                updateOrder($(this).data('beanId'), 'approve');
+            });
+            $('.deny-btn').click(function() {
+                updateOrder($(this).data('beanId'), 'deny');
+            });
+            function updateOrder(deviceId, status) {
+                var url = "/approvement/status?id="+deviceId+"&status="+status;
+                $(location).attr("href", url);
+            };
+        });
+    </script>
 
 </body>
 </html>

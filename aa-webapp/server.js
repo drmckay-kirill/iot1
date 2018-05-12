@@ -66,6 +66,8 @@ function renderVariables() {
     return {
         "moment": moment,
         "title": title,
+        "message": undefined,
+        "approve_mode": false,
         "access_token": "",
         "displayName": undefined,
         "email": undefined,
@@ -178,9 +180,23 @@ app.get('/approvement/new', function (req, res) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             renderStructure.orders = response;
+            renderStructure.approve_mode = true;
             res.render("index", renderStructure);          
         });
         
+    } else {
+        res.send("Not authenticated", 401);
+    }
+});
+
+app.get('/approvement/status', (req, res) => {
+    if (req.session.access_token) {
+        
+        console.log(req.query);
+
+        renderStructure = renderVariables();
+        renderStructure.access_token = req.session.access_token;
+        res.render("index", renderStructure);
     } else {
         res.send("Not authenticated", 401);
     }
