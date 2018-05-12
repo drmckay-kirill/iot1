@@ -27,4 +27,16 @@ module.exports = function(app, db) {
         });
     });
 
+    app.post('/secret_key/approvement/status', (request, response) => {
+        console.log('Update order status...');
+        res = {
+            "error": false,
+            "error_text": ""
+        };
+        console.log('Verify parameters');
+        console.log('Find order in database');
+        console.log('Update order record in database with new status');
+        response.send(res);
+    });
+    
 };

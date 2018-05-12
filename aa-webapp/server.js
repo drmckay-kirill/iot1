@@ -29,7 +29,7 @@ var idmURL = config.idmURL;
 var response_type = config.response_type;
 var callbackURL = config.callbackURL;
 
-function getJSON (rest, method, access_token, onResult) {
+function getJSON (rest, method, access_token, post_data, onResult) {
     var options = {
         host: config.backend_host,
         port: config.backend_port,
@@ -40,7 +40,7 @@ function getJSON (rest, method, access_token, onResult) {
             'x-auth-token': access_token
         }
     };
-    
+
     var req = http.request(options, (res) => {
         var output = '';
         res.setEncoding('utf8');
@@ -58,6 +58,10 @@ function getJSON (rest, method, access_token, onResult) {
     req.on('error', (err) => {
         console.log('error: ' + err.message);
     });
+    
+    if (post_data != "") {
+        req.write(JSON.stringify(post_data));
+    };
 
     req.end();
 };
@@ -146,7 +150,7 @@ app.get('/logout', function(req, res) {
 app.get('/attributes', function (req, res) {
     if (req.session.access_token) {
         
-        getJSON('/attributes', 'GET', req.session.access_token, function (status, response) {
+        getJSON('/attributes', 'GET', req.session.access_token, "", function (status, response) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             renderStructure.attributes = response;
@@ -161,7 +165,7 @@ app.get('/attributes', function (req, res) {
 app.get('/approvement', function (req, res) {
     if (req.session.access_token) {
         
-        getJSON('/secret_key/approvement', 'GET', req.session.access_token, function (status, response) {
+        getJSON('/secret_key/approvement', 'GET', req.session.access_token, "", function (status, response) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             renderStructure.orders = response;
@@ -176,7 +180,7 @@ app.get('/approvement', function (req, res) {
 app.get('/approvement/new', function (req, res) {
     if (req.session.access_token) {
         
-        getJSON('/secret_key/approvement/new', 'GET', req.session.access_token, function (status, response) {
+        getJSON('/secret_key/approvement/new', 'GET', req.session.access_token, "", function (status, response) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             renderStructure.orders = response;
@@ -191,12 +195,21 @@ app.get('/approvement/new', function (req, res) {
 
 app.get('/approvement/status', (req, res) => {
     if (req.session.access_token) {
-        
-        console.log(req.query);
-
-        renderStructure = renderVariables();
-        renderStructure.access_token = req.session.access_token;
-        res.render("index", renderStructure);
+        data = {
+            'status': req.query.status,
+            'device': req.query.id
+        };
+        getJSON('/secret_key/approvement/status', 'POST', req.session.access_token, data, function (status, response) {
+            renderStructure = renderVariables();
+            renderStructure.access_token = req.session.access_token;
+            if (status == 200) {
+                renderStructure.message = "Successfully updated! New order status: " + req.query.status + ".";
+            } else {
+                console.log(response);
+                renderStructure.message = "Error on update order event!";
+            };
+            res.render("index", renderStructure); 
+        });
     } else {
         res.send("Not authenticated", 401);
     }
