@@ -46,4 +46,46 @@ module.exports = function(app, db) {
         });
     });
 
+    app.get('/secret_key', (request, response) => {
+        console.log('Check last order status...');
+        res = {
+            'error': false,
+            'error_text': '',
+            'status': '',
+            'key': undefined
+        };
+        device = request.headers['x-nick-name'];
+        db.collection('orders').find({ 'device': device }).sort({'create_date':-1}).limit(1).toArray((err, result) => {
+            if (err) {
+                res.error = true;
+                res.error_text = 'Database search error';
+                response.send(res, 400);
+            } else {
+                console.log(result);
+                if (result[0].status == 'approve') {
+                    
+                    //TODO: generate secret key
+                    res.key = 'Not implemented!';
+
+                    newStatus = 'done';
+                    var newValues = {$set: { 'status': newStatus } };
+                    db.collection('orders').updateOne({'_id':result[0]._id}, newValues, (err, result) => {
+                        if (err) {
+                            res.error = true;
+                            res.error_text = 'Database update error';
+                            response.send(res, 400); 
+                        } else {
+                            res.status = newStatus;
+                            response.send(res);
+                        }
+                    });                    
+
+                } else {
+                    res.status = result[0].status;
+                    response.send(res);
+                }
+            }
+        }); 
+    });
+
 };
