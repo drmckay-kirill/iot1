@@ -202,7 +202,7 @@ app.get('/approvement/status', (req, res) => {
         getJSON('/secret_key/approvement/status', 'POST', req.session.access_token, data, function (status, response) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
-            if (status == 200) {
+            if (status == 200 && response.error == false) {
                 renderStructure.message = "Successfully updated! New order status: " + req.query.status + ".";
             } else {
                 console.log(response);

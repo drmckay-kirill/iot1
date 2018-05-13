@@ -33,10 +33,45 @@ module.exports = function(app, db) {
             "error": false,
             "error_text": ""
         };
+        newStatus = request.body.status;
+        device = request.body.device;
+        user_owner = request.headers['x-nick-name'];
         console.log('Verify parameters');
-        console.log('Find order in database');
-        console.log('Update order record in database with new status');
-        response.send(res);
+        if (newStatus != 'approve' && newStatus != 'deny') {
+            res.error = true;
+            res.error_text = 'Incorrect status';
+            response.send(res, 400);
+        } else {
+            console.log('Find order in database');
+            var details = { 'user_owner': user_owner, 'status': 'new', 'device': device };
+            db.collection('orders').find(details).toArray((err, result) => {
+                if (err) {
+                    res.error = true;
+                    res.error_text = 'Database search error';
+                    response.send(res, 400);
+                } else {
+                    if (result.length == 1) {
+
+                        console.log('Update order record in database with new status');
+                        var newValues = {$set: { 'status': newStatus } };
+                        db.collection('orders').updateMany(details, newValues, (err, result) => {
+                            if (err) {
+                                res.error = true;
+                                res.error_text = 'Database update error';
+                                response.send(res, 400); 
+                            } else {
+                                response.send(res);
+                            }
+                        });
+
+                    } else {
+                        res.error = true;
+                        res.error_text = 'Record not exists!';
+                        response.send(res, 400);
+                    }
+                };            
+            });
+        }
     });
     
 };
