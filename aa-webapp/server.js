@@ -1,8 +1,8 @@
 var express = require('express');
 var OAuth2 = require('./oauth2').OAuth2;
+var Helper = require('./helper').Helper;
 var config = require('./config');
 var session = require('express-session');
-var http = require("http");
 var moment = require('moment');
 const title = "TEST";
 
@@ -29,43 +29,6 @@ var idmURL = config.idmURL;
 var response_type = config.response_type;
 var callbackURL = config.callbackURL;
 
-function getJSON (rest, method, access_token, post_data, onResult) {
-    var options = {
-        host: config.backend_host,
-        port: config.backend_port,
-        path: rest,
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'x-auth-token': access_token
-        }
-    };
-
-    var req = http.request(options, (res) => {
-        var output = '';
-        res.setEncoding('utf8');
-
-        res.on('data', (chunk) => {
-            output += chunk;
-        });
-
-        res.on('end', function() {
-            var obj = JSON.parse(output);
-            onResult(res.statusCode, obj);
-        });
-    });
-
-    req.on('error', (err) => {
-        console.log('error: ' + err.message);
-    });
-    
-    if (post_data != "") {
-        req.write(JSON.stringify(post_data));
-    };
-
-    req.end();
-};
-
 function renderVariables() {
     return {
         "moment": moment,
@@ -87,6 +50,7 @@ var oa = new OAuth2(client_id,
                     '/oauth2/authorize',
                     '/oauth2/token',
                     callbackURL);
+var helper = new Helper(config.backend_host, config.backend_port);
 
 // Handles requests to the main page
 app.get('/', (req, res) => {
@@ -150,7 +114,7 @@ app.get('/logout', function(req, res) {
 app.get('/attributes', function (req, res) {
     if (req.session.access_token) {
         
-        getJSON('/attributes', 'GET', req.session.access_token, "", function (status, response) {
+        helper.getJSON('/attributes', 'GET', req.session.access_token, "", function (status, response) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             renderStructure.attributes = response;
@@ -165,7 +129,7 @@ app.get('/attributes', function (req, res) {
 app.get('/approvement', function (req, res) {
     if (req.session.access_token) {
         
-        getJSON('/secret_key/approvement', 'GET', req.session.access_token, "", function (status, response) {
+        helper.getJSON('/secret_key/approvement', 'GET', req.session.access_token, "", function (status, response) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             renderStructure.orders = response;
@@ -180,7 +144,7 @@ app.get('/approvement', function (req, res) {
 app.get('/approvement/new', function (req, res) {
     if (req.session.access_token) {
         
-        getJSON('/secret_key/approvement/new', 'GET', req.session.access_token, "", function (status, response) {
+        helper.getJSON('/secret_key/approvement/new', 'GET', req.session.access_token, "", function (status, response) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             renderStructure.orders = response;
@@ -199,7 +163,7 @@ app.get('/approvement/status', (req, res) => {
             'status': req.query.status,
             'device': req.query.id
         };
-        getJSON('/secret_key/approvement/status', 'POST', req.session.access_token, data, function (status, response) {
+        helper.getJSON('/secret_key/approvement/status', 'POST', req.session.access_token, data, function (status, response) {
             renderStructure = renderVariables();
             renderStructure.access_token = req.session.access_token;
             if (status == 200 && response.error == false) {

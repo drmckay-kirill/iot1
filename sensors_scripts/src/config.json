@@ -5,5 +5,5 @@
 "sensor_password": "iot_sensor_d9e6de6c-d9e4-49f5-88f8-f2dd1202300b",
 "idm_host": "http://fiware-idm:3000",
 "aa_host": "http://aa-pep-proxy",
-"access_token": "c1ce67e2270385bc54dcb47bea5936506d676db9"
+"access_token": "a95f5a4e5e32d55f060773d11b29716ddf94c9fa"
 }
