@@ -1,9 +1,29 @@
 var http = require("http");
+const title = "TEST";
 
-exports.Helper = function (backend_host, backend_port) {
+exports.Helper = function (backend_host, backend_port, moment) {
     this.backend_host = backend_host;
     this.backend_port = backend_port;
+    this.moment = moment;
 }
+
+exports.Helper.prototype.getTitle = function() {
+    return title;
+}
+
+exports.Helper.prototype.renderVariables = function () {
+    return {
+        "moment": this.moment,
+        "title": title,
+        "message": undefined,
+        "approve_mode": false,
+        "access_token": "",
+        "displayName": undefined,
+        "email": undefined,
+        "attributes": [],
+        "orders": []
+    }  
+};
 
 exports.Helper.prototype.getJSON = function (rest, method, access_token, post_data, onResult) {
     var options = {
