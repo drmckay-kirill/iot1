@@ -86,3 +86,14 @@ services:
     networks:
       idm_network:
         ipv4_address: 172.18.1.11
+
+  aa-crypto:
+    build:
+      context: aa-crypto
+      dockerfile: Dockerfile
+    networks:
+      idm_network:
+        ipv4_address: 172.18.1.25
+    volumes:
+      - /home/drmckay/science/iot1/aa-crypto:/opt/aa-crypto
+    tty: true 

@@ -2,3 +2,5 @@ package-lock.json
 node_modules
 fiware-pep-proxy
 .vscode
+charm
+__pycache__
