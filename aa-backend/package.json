@@ -5,6 +5,7 @@
     "author": "Kirill Y. Ponomarev",
     "dependencies": {
         "express": "3.x",
-        "mongodb": "3.x"
+        "mongodb": "3.x",
+        "request": "^2.86.0"
     }
 }

@@ -96,4 +96,8 @@ services:
         ipv4_address: 172.18.1.25
     volumes:
       - /home/drmckay/science/iot1/aa-crypto:/opt/aa-crypto
+    environment:
+      - FLASK_APP=/opt/aa-crypto/src/start-service.py
+      - FLASK_ENV=development
+      - LANG=C.UTF-8
     tty: true 

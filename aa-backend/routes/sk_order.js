@@ -1,3 +1,5 @@
+var request_lib = require('request');
+
 module.exports = function(app, db) {
     
     app.post('/secret_key/order', function (req, res) {
@@ -64,21 +66,30 @@ module.exports = function(app, db) {
                 console.log(result);
                 if (result[0].status == 'approve') {
                     
-                    //TODO: generate secret key
-                    res.key = 'Not implemented!';
+                    request_lib.post({url: 'http://aa-crypto:5000/sk', json: result[0].attributes} , (error, resp, body) => {
+                        if (!error && resp.statusCode == 200) {
+                            res.key = body;
+                            newStatus = 'done';
 
-                    newStatus = 'done';
-                    var newValues = {$set: { 'status': newStatus } };
-                    db.collection('orders').updateOne({'_id':result[0]._id}, newValues, (err, result) => {
-                        if (err) {
-                            res.error = true;
-                            res.error_text = 'Database update error';
-                            response.send(res, 400); 
+                            var newValues = {$set: { 'status': newStatus } };
+                            db.collection('orders').updateOne({'_id':result[0]._id}, newValues, (err, result) => {
+                                if (err) {
+                                    res.error = true;
+                                    res.error_text = 'Database update error';
+                                    response.send(res, 400); 
+                                } else {
+                                    res.status = newStatus;
+                                    response.send(res);
+                                }
+                            });
+
                         } else {
-                            res.status = newStatus;
-                            response.send(res);
+                            res.error = true;
+                            res.error_text = 'Error on generating cryptographic secret key';
+                            console.log(error);
+                            response.send(res, 400);
                         }
-                    });                    
+                    })
 
                 } else {
                     res.status = result[0].status;

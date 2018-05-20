@@ -10,7 +10,7 @@ def main():
     res = requests.get(config['aa_host'] + '/secret_key', headers = {
         "x-auth-token": config["access_token"]
     })
-    logging.info(res.text)
+    logging.info(res.text)    
 
 if __name__ == "__main__":
     main()
