@@ -75,9 +75,20 @@ services:
     networks:
       idm_network:
         ipv4_address: 172.18.1.10
-    volumes: 
+    volumes:
       - /home/drmckay/science/iot1/sensors_scripts:/opt/sensors
     tty: true
+
+  # sensors:
+  #   build:
+  #     context: oscripts
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     idm_network:
+  #       ipv4_address: 172.18.1.10
+  #   volumes:
+  #     - /home/drmckay/science/iot1/oscripts:/opt/scripts
+  #   tty: true
 
   mongo:
     image: mongo:latest

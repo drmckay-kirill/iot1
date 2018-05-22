@@ -5,3 +5,4 @@ fiware-pep-proxy
 charm
 __pycache__
 keys
+access_token.bin
